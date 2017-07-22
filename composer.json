@@ -1,0 +1,41 @@
+{
+  "name": "slexx/request",
+  "type": "library",
+  "description": "Http requests library",
+  "keywords": [
+    "request",
+    "http"
+  ],
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Aleksei Shchepkin",
+      "email": "slexx1234@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "slexx1234@gmail.com"
+  },
+  "require": {
+    "slexx/url": "^1.0",
+    "slexx/headers": "^1.0",
+    "slexx/cookie": "^1.0",
+    "slexx/session": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Slexx\\Request\\": "src/"
+    },
+    "exclude-from-classmap": [
+      "/tests/"
+    ]
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}
