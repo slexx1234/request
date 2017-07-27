@@ -3,8 +3,6 @@
 namespace Slexx\Request;
 
 use Slexx\Url\Url;
-use Slexx\Cookie\Cookie;
-use Slexx\Session\Session;
 use Slexx\Headers\Headers;
 
 class Request
@@ -20,24 +18,9 @@ class Request
     protected $headers;
 
     /**
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     * @var Cookie
-     */
-    protected $cookie;
-
-    /**
      * @var Params
      */
     protected $params;
-
-    /**
-     * @var Arguments
-     */
-    protected $arguments;
 
     /**
      *
@@ -52,9 +35,6 @@ class Request
         $this->url = new Url($url);
 
         $this->headers = new Headers(http_get_request_headers());
-        $this->session = new Session();
-        $this->cookie = new Cookie();
-        $this->arguments = new Arguments();
 
         if ($this->isGet()) {
             $this->params = new Params($_GET);
@@ -149,33 +129,6 @@ class Request
     public function getHeaders()
     {
         return $this->headers;
-    }
-
-    /**
-     * Получение объекта печенек
-     * @return Cookie
-     */
-    public function getCookie()
-    {
-        return $this->cookie;
-    }
-
-    /**
-     * Получение объекта текущей сессии
-     * @return Session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
-    /**
-     * Получение аргументов коммандной строки
-     * @return Arguments
-     */
-    public function getArguments()
-    {
-        return $this->arguments;
     }
 
     /**
