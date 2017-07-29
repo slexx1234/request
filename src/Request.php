@@ -10,49 +10,23 @@ class Request
     /**
      * @var Url
      */
-    protected $url;
+    protected static $url = null;
 
     /**
      * @var Headers
      */
-    protected $headers;
+    protected static $headers = null;
 
     /**
      * @var Params
      */
-    protected $params;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $url = 'http';
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-            $url .= 's';
-        }
-        $url .= '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $this->url = new Url($url);
-
-        $this->headers = new Headers(http_get_request_headers());
-
-        if ($this->isGet()) {
-            $this->params = new Params($_GET);
-        } else {
-            $body = $this->getBody();
-            if (is_array($body)) {
-                $this->params = new Params($body);
-            } else {
-                $this->params = new Params([]);
-            }
-        }
-    }
+    protected static $params;
 
     /**
      * Получение имени метода запроса
      * @return string
      */
-    public function getMethod()
+    public static function getMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
     }
@@ -60,82 +34,103 @@ class Request
     /**
      * @return bool
      */
-    public function isGet()
+    public static function isGet()
     {
-        return $this->getMethod() === 'GET';
+        return static::getMethod() === 'GET';
     }
 
     /**
      * @return bool
      */
-    public function isPost()
+    public static function isPost()
     {
-        return $this->getMethod() === 'POST';
+        return static::getMethod() === 'POST';
     }
 
     /**
      * @return bool
      */
-    public function isPut()
+    public static function isPut()
     {
-        return $this->getMethod() === 'PUT';
+        return static::getMethod() === 'PUT';
     }
 
     /**
      * @return bool
      */
-    public function isDelete()
+    public static function isDelete()
     {
-        return $this->getMethod() === 'DELETE';
+        return static::getMethod() === 'DELETE';
     }
 
     /**
      * @return bool
      */
-    public function isHead()
+    public static function isHead()
     {
-        return $this->getMethod() === 'HEAD';
+        return static::getMethod() === 'HEAD';
     }
 
     /**
      * @return bool
      */
-    public function isPatch()
+    public static function isPatch()
     {
-        return $this->getMethod() === 'PATCH';
+        return static::getMethod() === 'PATCH';
     }
 
     /**
      * @return bool
      */
-    public function isOptions()
+    public static function isOptions()
     {
-        return $this->getMethod() === 'OPTIONS';
+        return static::getMethod() === 'OPTIONS';
     }
 
     /**
      * Получение Url текущего запроса
-     * @return Url
+     * @return Url|null
      */
-    public function getUrl()
+    public static function getUrl()
     {
-        return $this->url;
+        if (static::isCLI()) {
+            return null;
+        }
+
+        if (static::$url === null) {
+            $url = 'http';
+            if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+                $url .= 's';
+            }
+            $url .= '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            static::$url = new Url($url);
+        }
+
+        return static::$url;
     }
 
     /**
      * Получение заголовков текущего запроса
      * @return Headers
      */
-    public function getHeaders()
+    public static function getHeaders()
     {
-        return $this->headers;
+        if (static::isCLI()) {
+            return null;
+        }
+
+        if (static::$headers === null) {
+            static::$headers = new Headers(http_get_request_headers());
+        }
+
+        return static::$headers;
     }
 
     /**
      * Является запрос Ajax запросм?
      * @return bool
      */
-    public function isAjax()
+    public static function isAjax()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
@@ -145,16 +140,16 @@ class Request
      * @return bool
      * @see Request::isAjax()
      */
-    public function isXhr()
+    public static function isXhr()
     {
-        return $this->isAjax();
+        return static::isAjax();
     }
 
     /**
      * Проверяет является ли текуший запрос совершённым из коммандной строки
      * @return bool
      */
-    public function isCLI()
+    public static function isCLI()
     {
         return in_array(PHP_SAPI, ['cli', 'cli-server']);
     }
@@ -164,10 +159,10 @@ class Request
      * через Ajax и не из коммандной строки
      * @return bool
      */
-    public function isStatic()
+    public static function isStatic()
     {
-        return !$this->isAjax()
-            && !$this->isCli();
+        return !static::isAjax()
+            && !static::isCli();
     }
 
     /**
@@ -176,9 +171,9 @@ class Request
      * массивы.
      * @return array|string
      */
-    public function getBody()
+    public static function getBody()
     {
-        $contentType = $this->headers->get('Content-Type');
+        $contentType = static::$headers->get('Content-Type');
         $body = file_get_contents('php://input');
 
         if (mb_substr($contentType,'application/x-www-form-urlencoded') === 0) {
@@ -195,8 +190,25 @@ class Request
      * Получение параметров запроса
      * @return Params
      */
-    public function getParams()
+    public static function getParams()
     {
-        return $this->params;
+        if (static::isCLI()) {
+            return null;
+        }
+
+        if (static::$params === null) {
+            if (static::isGet()) {
+                static::$params = new Params($_GET);
+            } else {
+                $body = static::getBody();
+                if (is_array($body)) {
+                    static::$params = new Params(array_merge($_GET, $body));
+                } else {
+                    static::$params = new Params($_GET);
+                }
+            }
+        }
+
+        return static::$params;
     }
 }
