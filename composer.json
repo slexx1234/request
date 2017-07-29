@@ -9,7 +9,6 @@
     "cookie"
   ],
   "license": "MIT",
-  "version": "1.1.0",
   "authors": [
     {
       "name": "Aleksei Shchepkin",
@@ -21,7 +20,7 @@
     "email": "slexx1234@gmail.com"
   },
   "require": {
-    "slexx/url": "^1.0",
+    "slexx/url": "^1.1.1",
     "slexx/headers": "^1.0"
   },
   "require-dev": {
