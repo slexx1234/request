@@ -30,7 +30,8 @@
       "Slexx\\Request\\": "src/"
     },
     "exclude-from-classmap": [
-      "/tests/"
+      "/tests/",
+      "/docs"
     ]
   },
   "scripts": {
