@@ -159,7 +159,7 @@ class Request
      * через Ajax и не из коммандной строки
      * @return bool
      */
-    public static function isStatic()
+    public static function isSync()
     {
         return !static::isAjax()
             && !static::isCli();
