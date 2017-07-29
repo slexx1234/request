@@ -4,7 +4,9 @@
   "description": "Http requests library",
   "keywords": [
     "request",
-    "http"
+    "http",
+    "session",
+    "cookie"
   ],
   "license": "MIT",
   "version": "1.0.0",
