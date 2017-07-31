@@ -120,7 +120,7 @@ class Request
         }
 
         if (static::$headers === null) {
-            static::$headers = new Headers(http_get_request_headers());
+            static::$headers = new Headers(getallheaders());
         }
 
         return static::$headers;
