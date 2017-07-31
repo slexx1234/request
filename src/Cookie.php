@@ -51,7 +51,7 @@ class Cookie
      * @param bool [$options['httponly']] - Если установить true, то печеньки не будут доступны скриптовым языкам таким как javascript
      * @return void
      */
-    public static function set($key, $value, $options)
+    public static function set($key, $value, $options = [])
     {
         $options = array_merge([
             'expire'   => null,
