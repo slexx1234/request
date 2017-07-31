@@ -211,4 +211,24 @@ class Request
 
         return static::$params;
     }
+
+    /**
+     * Получает заголовак
+     * @param string $name
+     * @return string|null
+     */
+    public static function getHeader($name)
+    {
+        return static::getHeaders()->get($name);
+    }
+
+    /**
+     * Проверяет существования заголовка
+     * @param string $name
+     * @return bool
+     */
+    public static function hasHeader($name)
+    {
+        return static::getHeaders()->has($name);
+    }
 }
