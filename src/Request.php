@@ -176,10 +176,10 @@ class Request
         $contentType = static::getHeader('Content-Type');
         $body = file_get_contents('php://input');
 
-        if (mb_substr($contentType,'application/x-www-form-urlencoded') === 0) {
+        if (mb_strpos($contentType,'application/x-www-form-urlencoded') === 0) {
             parse_str($body, $data);
             return $data;
-        } else if (mb_substr($contentType, 'application/json') === 0) {
+        } else if (mb_strpos($contentType, 'application/json') === 0) {
             return json_decode($body, true);
         } else {
             return $body;
