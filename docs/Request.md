@@ -91,6 +91,19 @@
 
 **Возвращает:** [Params](https://github.com/slexx1234/request/blob/master/docs/Params.md), `null`
 
+
+### Request::getParam($key)
+
+Получение параметра запроса
+
+**Аргументы:**
+
+| Имя    | Тип      | Описание       |
+| ------ | -------- | -------------- |
+| `$key` | `string` | Ключ параметра |
+
+**Возвращает:** `mixed`
+
 ### Request::getHeader($name)
 
 Получает заголовак

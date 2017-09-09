@@ -173,7 +173,7 @@ class Request
      */
     public static function getBody()
     {
-        $contentType = static::$headers->get('Content-Type');
+        $contentType = static::getHeader('Content-Type');
         $body = file_get_contents('php://input');
 
         if (mb_substr($contentType,'application/x-www-form-urlencoded') === 0) {
@@ -210,6 +210,16 @@ class Request
         }
 
         return static::$params;
+    }
+
+    /**
+     * Получение параметра запроса
+     * @param string $key
+     * @return mixed
+     */
+    public static function getParam($key)
+    {
+        return static::getParams()->get($key);
     }
 
     /**
